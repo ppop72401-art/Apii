@@ -3,125 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مساعد جيميناي الخاص</title>
+    <title>مساعد جيميناي الذكي</title>
     <style>
+        :root {
+            --primary-color: #1a73e8;
+            --background-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --text-color: #202124;
+            --border-radius: 12px;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
             justify-content: center;
         }
-        .container {
-            background-color: #ffffff;
+
+        .chat-container {
+            background-color: var(--surface-color);
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
-        h2 {
+
+        h1 {
             text-align: center;
-            color: #1a73e8;
-            margin-top: 0;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-        }
-        input[type="password"], textarea {
-            width: 100%;
-            padding: 12px;
+            color: var(--primary-color);
+            font-size: 1.8rem;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-family: inherit;
         }
-        button {
+
+        .info-note {
+            background-color: #e8f0fe;
+            color: #1967d2;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
             width: 100%;
-            padding: 12px;
-            background-color: #1a73e8;
+            padding: 15px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
             color: white;
             border: none;
+            padding: 15px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s;
         }
+
         button:hover {
             background-color: #1557b0;
         }
+
         button:disabled {
-            background-color: #a0c2f5;
+            background-color: #aecbfa;
             cursor: not-allowed;
         }
-        #response-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border: 1px solid #e0e0e0;
+
+        .response-area {
+            background-color: #f1f3f4;
+            padding: 20px;
             border-radius: 8px;
-            min-height: 100px;
+            min-height: 120px;
             white-space: pre-wrap;
             line-height: 1.6;
-            color: #202124;
+            border: 1px solid #e8eaed;
+        }
+
+        .loading {
+            color: #5f6368;
+            font-style: italic;
+        }
+
+        .error {
+            color: #d93025;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>محادثة مع Gemini 🤖</h2>
+    <div class="chat-container">
+        <h1>مساعد جيميناي الذكي 🤖</h1>
         
-        <label for="apiKey">مفتاح API الخاص بجيميناي:</label>
-        <input type="password" id="apiKey" placeholder="ضع مفتاح API هنا (لن يتم حفظه)...">
-        
-        <label for="prompt">ماذا تريد أن تسأل؟</label>
-        <textarea id="prompt" rows="4" placeholder="اكتب رسالتك أو سؤالك هنا..."></textarea>
-        
-        <button id="sendBtn" onclick="sendRequest()">إرسال الطلب</button>
-        
-        <div id="response-box">نتيجة البحث ستظهر هنا...</div>
+        <div class="info-note">
+            تم دمج مفتاح واجهة برمجة التطبيقات (API Key) داخل الكود بناءً على طلبك.
+        </div>
+
+        <div class="input-group">
+            <textarea id="userInput" placeholder="اكتب سؤالك أو طلبك هنا..."></textarea>
+            <button id="sendBtn" onclick="generateResponse()">إرسال</button>
+        </div>
+
+        <div id="responseArea" class="response-area">
+            سيظهر رد جيميناي هنا...
+        </div>
     </div>
 
     <script>
-        async function sendRequest() {
-            const apiKey = document.getElementById('apiKey').value.trim();
-            const prompt = document.getElementById('prompt').value.trim();
-            const responseBox = document.getElementById('response-box');
-            const sendBtn = document.getElementById('sendBtn');
+        // ==========================================
+        // ضع مفتاح API الخاص بك بين علامتي التنصيص هنا
+        // ==========================================
+        const API_KEY = "YOUR_API_KEY_HERE"; 
+        
+        // بناءً على الوثائق، تم تحديث النموذج إلى gemini-1.5-flash أو gemini-3.6-flash
+        // استخدام النموذج المتوفر والمستقر حالياً لطلبات الـ REST
+        const MODEL_NAME = "gemini-1.5-flash"; 
 
-            // التحقق من المدخلات
-            if (!apiKey) {
-                alert("الرجاء إدخال مفتاح API أولاً!");
+        async function generateResponse() {
+            const inputElement = document.getElementById('userInput');
+            const responseElement = document.getElementById('responseArea');
+            const btnElement = document.getElementById('sendBtn');
+            const userText = inputElement.value.trim();
+
+            if (!userText) {
+                alert("الرجاء كتابة نص أولاً.");
                 return;
             }
-            if (!prompt) {
-                alert("الرجاء كتابة سؤال أو رسالة!");
+
+            if (API_KEY === "YOUR_API_KEY_HERE" || API_KEY === "") {
+                responseElement.innerHTML = `<span class="error">خطأ: لم تقم بإدخال مفتاح API في الكود المصدري. الرجاء تعديل المتغير API_KEY.</span>`;
                 return;
             }
 
-            // تحديث الواجهة أثناء الانتظار
-            responseBox.innerHTML = "<em>جاري التفكير وصياغة الرد... ⏳</em>";
-            sendBtn.disabled = true;
+            // تحديث حالة الواجهة
+            inputElement.disabled = true;
+            btnElement.disabled = true;
+            responseElement.innerHTML = '<span class="loading">جاري معالجة الطلب... يرجى الانتظار ⏳</span>';
 
-            // رابط الـ API الخاص بجيميناي
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            // رابط نقطة النهاية (Endpoint) لـ Gemini API
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
             try {
-                const response = await fetch(url, {
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         contents: [{
-                            parts: [{ text: prompt }]
+                            parts: [{ text: userText }]
                         }]
                     })
                 });
@@ -129,17 +185,20 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.error?.message || "حدث خطأ غير معروف");
+                    throw new Error(data.error?.message || "حدث خطأ غير معروف أثناء الاتصال بالخادم.");
                 }
 
-                // استخراج النص من الرد وعرضه
-                const replyText = data.candidates[0].content.parts[0].text;
-                responseBox.innerText = replyText;
+                // استخراج وعرض الرد
+                const aiResponse = data.candidates[0].content.parts[0].text;
+                responseElement.innerText = aiResponse;
 
             } catch (error) {
-                responseBox.innerHTML = `<span style="color: red;"><strong>خطأ:</strong> ${error.message}</span><br><br>تأكد من صلاحية مفتاح الـ API وأنك متصل بالإنترنت.`;
+                responseElement.innerHTML = `<span class="error">حدث خطأ: ${error.message}</span>`;
             } finally {
-                sendBtn.disabled = false;
+                // إعادة تفعيل الواجهة
+                inputElement.disabled = false;
+                btnElement.disabled = false;
+                inputElement.focus();
             }
         }
     </script>
