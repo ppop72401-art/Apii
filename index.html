@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد جيميناي الخاص</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #1a73e8;
+            margin-top: 0;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input[type="password"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        button:disabled {
+            background-color: #a0c2f5;
+            cursor: not-allowed;
+        }
+        #response-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #202124;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>محادثة مع Gemini 🤖</h2>
+        
+        <label for="apiKey">مفتاح API الخاص بجيميناي:</label>
+        <input type="password" id="apiKey" placeholder="ضع مفتاح API هنا (لن يتم حفظه)...">
+        
+        <label for="prompt">ماذا تريد أن تسأل؟</label>
+        <textarea id="prompt" rows="4" placeholder="اكتب رسالتك أو سؤالك هنا..."></textarea>
+        
+        <button id="sendBtn" onclick="sendRequest()">إرسال الطلب</button>
+        
+        <div id="response-box">نتيجة البحث ستظهر هنا...</div>
+    </div>
+
+    <script>
+        async function sendRequest() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const prompt = document.getElementById('prompt').value.trim();
+            const responseBox = document.getElementById('response-box');
+            const sendBtn = document.getElementById('sendBtn');
+
+            // التحقق من المدخلات
+            if (!apiKey) {
+                alert("الرجاء إدخال مفتاح API أولاً!");
+                return;
+            }
+            if (!prompt) {
+                alert("الرجاء كتابة سؤال أو رسالة!");
+                return;
+            }
+
+            // تحديث الواجهة أثناء الانتظار
+            responseBox.innerHTML = "<em>جاري التفكير وصياغة الرد... ⏳</em>";
+            sendBtn.disabled = true;
+
+            // رابط الـ API الخاص بجيميناي
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error?.message || "حدث خطأ غير معروف");
+                }
+
+                // استخراج النص من الرد وعرضه
+                const replyText = data.candidates[0].content.parts[0].text;
+                responseBox.innerText = replyText;
+
+            } catch (error) {
+                responseBox.innerHTML = `<span style="color: red;"><strong>خطأ:</strong> ${error.message}</span><br><br>تأكد من صلاحية مفتاح الـ API وأنك متصل بالإنترنت.`;
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
