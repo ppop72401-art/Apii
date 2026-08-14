@@ -3,327 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنيو الذكي | استشر جيميناي 🛒🤖</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <title>المنيو الذكي 🥩 | مساعد جيميناي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* تصميم عصري، بسيط، وعالي التباين */
+        /* تصميم مبسط ومتباين (أبيض وأسود وألوان واضحة) */
         :root {
-            --bg-color: #f4f4f5;
-            --surface-color: #ffffff;
-            --text-primary: #18181b;
-            --text-secondary: #52525b;
-            --accent-color: #000000;
-            --accent-hover: #27272a;
-            --border-color: #e4e4e7;
-            --chat-user: #000000;
-            --chat-user-text: #ffffff;
-            --chat-ai: #f4f4f5;
-            --chat-ai-text: #18181b;
-            --price-color: #059669;
+            --bg: #ffffff;
+            --surface: #f9fafb;
+            --primary: #000000;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --accent: #2563eb; 
+            --price: #166534;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        
-        body { background-color: var(--bg-color); color: var(--text-primary); display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
-        
-        .header-container { width: 100%; max-width: 1200px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px; }
-        
-        h1 { font-size: 2rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; }
-        
-        .api-input-group { display: flex; gap: 10px; background: var(--surface-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .api-input-group input { flex: 1; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
-        .api-input-group input:focus { border-color: var(--accent-color); }
-        
-        .main-container { width: 100%; max-width: 1200px; display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+        body { background-color: var(--bg); color: var(--text-dark); padding-bottom: 80px; }
 
-        /* قسم المنيو */
-        .menu-section { flex: 2; min-width: 300px; background: var(--surface-color); padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid var(--border-color); height: 75vh; overflow-y: auto; }
+        /* شريط المفتاح العلوي */
+        .top-bar { background: var(--primary); padding: 15px 20px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 100; }
+        .top-bar input { width: 100%; max-width: 600px; padding: 12px 20px; border-radius: 8px; border: none; font-size: 1rem; text-align: center; outline: none; }
         
-        .category-title { font-size: 1.5rem; font-weight: 900; margin: 20px 0 15px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-color); display: flex; align-items: center; gap: 10px; }
-        .subcategory-title { font-size: 1.2rem; font-weight: 700; color: var(--text-secondary); margin: 15px 0 10px; }
-        
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-        
-        .item-card { border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between; background: var(--surface-color); }
-        .item-card:hover { border-color: var(--accent-color); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        
-        .item-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 5px; color: var(--text-primary); }
-        .item-desc { font-size: 0.85rem; color: var(--text-secondary); white-space: pre-line; margin-bottom: 10px; }
-        .item-price { font-weight: 900; font-size: 1.2rem; color: var(--price-color); align-self: flex-end; }
+        .header { text-align: center; padding: 40px 20px 20px; }
+        .header h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; }
 
-        /* قسم المساعد الذكي */
-        .chat-section { flex: 1; min-width: 320px; background: var(--surface-color); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid var(--border-color); display: flex; flex-direction: column; height: 75vh; overflow: hidden; position: sticky; top: 20px; }
+        /* حاوية المنيو */
+        .menu-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         
-        .chat-header { background: var(--accent-color); color: white; padding: 15px 20px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between; }
+        .category-section { margin-bottom: 50px; }
+        .category-title { font-size: 1.8rem; font-weight: 900; border-bottom: 3px solid var(--primary); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; }
+        .sub-category-title { font-size: 1.3rem; font-weight: 700; color: var(--text-muted); margin-bottom: 15px; }
         
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #fafafa; }
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
         
-        .msg { padding: 12px 18px; border-radius: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.6; word-wrap: break-word; font-weight: 500; }
-        .msg.user { background: var(--chat-user); color: var(--chat-user-text); align-self: flex-start; border-top-right-radius: 2px; }
-        .msg.ai { background: var(--chat-ai); color: var(--chat-ai-text); border: 1px solid var(--border-color); align-self: flex-end; border-top-left-radius: 2px; }
-        
-        .typing-indicator { font-size: 0.85rem; color: var(--text-secondary); font-style: italic; display: none; padding: 0 10px; margin-bottom: 10px; }
-        
-        .chat-input-area { padding: 15px; background: var(--surface-color); border-top: 1px solid var(--border-color); display: flex; gap: 10px; }
-        .chat-input-area input { flex: 1; padding: 12px 15px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; transition: 0.3s; }
-        .chat-input-area input:focus { border-color: var(--accent-color); }
-        .btn { padding: 12px 20px; background: var(--accent-color); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; white-space: nowrap; }
-        .btn:hover { background: var(--accent-hover); }
-        .btn:disabled { background: #a1a1aa; cursor: not-allowed; }
+        .item-card { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.2s; }
+        .item-card:hover { border-color: var(--primary); box-shadow: 0 8px 15px rgba(0,0,0,0.05); }
+        .item-name { font-size: 1.15rem; font-weight: 900; margin-bottom: 8px; }
+        .item-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; white-space: pre-line; margin-bottom: 15px; }
+        .item-price { font-size: 1.25rem; font-weight: 900; color: var(--price); text-align: left; }
 
-        /* التمرير المخصص */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
+        /* زر الدردشة العائم */
+        .chat-toggle-btn { position: fixed; bottom: 30px; left: 30px; background: var(--primary); color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: none; z-index: 1000; transition: transform 0.2s; }
+        .chat-toggle-btn:hover { transform: scale(1.05); }
+
+        /* نافذة الدردشة */
+        .chat-window { position: fixed; bottom: 110px; left: 30px; width: 380px; height: 500px; max-height: 70vh; background: var(--bg); border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border: 1px solid var(--border); display: flex; flex-direction: column; z-index: 999; transform: translateY(20px); opacity: 0; pointer-events: none; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; }
+        .chat-window.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        
+        .chat-header { background: var(--primary); color: white; padding: 18px; text-align: center; font-weight: 900; font-size: 1.1rem; position: relative; }
+        .close-chat { position: absolute; right: 18px; top: 18px; background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
+        
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #fdfdfd; }
+        
+        .msg { padding: 12px 16px; border-radius: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.5; }
+        .msg.ai { background: var(--surface); border: 1px solid var(--border); align-self: flex-start; border-bottom-right-radius: 2px; }
+        .msg.user { background: var(--primary); color: white; align-self: flex-end; border-bottom-left-radius: 2px; }
+        
+        .typing-indicator { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-top: -5px; margin-bottom: 10px; display: none; padding: 0 5px; }
+        
+        .chat-input { padding: 15px; background: var(--bg); border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .chat-input input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); outline: none; font-size: 0.95rem; }
+        .chat-input input:focus { border-color: var(--primary); }
+        .chat-input button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+        .chat-input button:disabled { background: var(--text-muted); cursor: not-allowed; }
 
         @media (max-width: 768px) {
-            .main-container { flex-direction: column; }
-            .menu-section, .chat-section { width: 100%; height: 60vh; }
-            .chat-section { position: relative; top: 0; }
+            .chat-window { width: calc(100% - 40px); left: 20px; right: 20px; bottom: 100px; }
+            .chat-toggle-btn { bottom: 20px; left: 20px; }
         }
     </style>
 </head>
 <body>
 
-<div class="header-container">
-    <h1>المنيو الرقمي الذكي 🥩🌿</h1>
-    <div class="api-input-group">
-        <input type="password" id="apiKey" placeholder="أدخل مفتاح Gemini API لتفعيل المساعد الذكي...">
-    </div>
+<!-- شريط المفتاح -->
+<div class="top-bar">
+    <input type="password" id="apiKey" placeholder="أدخل مفتاح الـ API هنا لتفعيل جيميناي...">
 </div>
 
-<div class="main-container">
-    <!-- قسم المنيو (يتم توليده ديناميكياً) -->
-    <div class="menu-section" id="menuContainer">
-        <!-- سيتم حقن المحتوى هنا بواسطة JavaScript -->
-    </div>
+<div class="header">
+    <h1>قائمة المنتجات 📋</h1>
+</div>
 
-    <!-- قسم المساعد الذكي -->
-    <div class="chat-section">
-        <div class="chat-header">
-            <span>مساعدك الشخصي 🤖</span>
-            <span style="font-size: 0.8rem; font-weight: 400; opacity: 0.8;">جاهز لخدمتك</span>
-        </div>
-        <div class="chat-messages" id="chatBox">
-            <div class="msg ai">أهلاً بك! أنا المساعد الذكي الخاص بالمنيو. 
-أعرف كل التفاصيل عن اللحوم الباردة والتوابل المتوفرة لدينا. 
-بإمكاني مساعدتك في اختيار ما يناسب وصفتك، أو مقارنة الأسعار، أو حتى إعطائك نصائح للطبخ! كيف يمكنني خدمتك اليوم؟ ✨</div>
-        </div>
-        <div class="typing-indicator" id="typingIndicator">جيميناي يحلل المنيو ويكتب الرد... ✍️</div>
-        <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="اسأل عن المنتجات، الأسعار، أو نصائح الطبخ..." onkeypress="handleEnter(event)">
-            <button class="btn" id="sendBtn" onclick="sendMessage()">إرسال</button>
-        </div>
+<!-- حاوية المنيو -->
+<div class="menu-container" id="menuContainer"></div>
+
+<!-- المساعد الذكي -->
+<button class="chat-toggle-btn" onclick="toggleChat()">💬</button>
+
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+        مساعدك الذكي جيميناي 🤖
+        <button class="close-chat" onclick="toggleChat()">✖</button>
+    </div>
+    <div class="chat-messages" id="chatBox">
+        <div class="msg ai">أهلاً بك! أنا مساعدك الخاص للمنيو. اسألني عن التفاصيل، الأسعار، أو حتى نصائح لطبخ هذه اللحوم والتوابل! 👨‍🍳</div>
+    </div>
+    <div class="typing-indicator" id="typingIndicator">جيميناي يكتب... ✍️</div>
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="اكتب سؤالك هنا..." onkeypress="handleEnter(event)">
+        <button id="sendBtn" onclick="handleChatAction()">إرسال</button>
     </div>
 </div>
 
 <script>
-    // 1. بيانات المنيو المعطاة (تم إصلاح الإغلاق في النهاية)
+    // --- 1. بيانات المنيو ---
     const menuData = {
       "categories": [
         {
-          "id": "c1",
-          "name": "اللحوم الباردة",
+          "id": "c1", "name": "اللحوم الباردة",
           "items": [
-            { "id": "i_1", "name": "ببروني التغذية", "description": "المنشأ لبنان\nالتعبئة ٤٥٠ غرام", "price": "7", "currency": "$", "unit": "" },
-            { "id": "i_2", "name": "حبش مدخن اسباني Bocatel", "description": "المنشأ اسباني \nالتعبئة 3 كغ", "price": "35", "currency": "$", "unit": "" },
-            { "id": "i_3", "name": "بفاريا سجق 1 كغ", "description": "", "price": "70850", "currency": "ل.س", "unit": "قطعة" }
+            { "name": "ببروني التغذية", "description": "المنشأ لبنان\nالتعبئة ٤٥٠ غرام", "price": "7", "currency": "$" },
+            { "name": "حبش مدخن اسباني Bocatel", "description": "المنشأ اسباني \nالتعبئة 3 كغ", "price": "35", "currency": "$" },
+            { "name": "بفاريا سجق 1 كغ", "description": "", "price": "70850", "currency": "ل.س", "unit": "قطعة" }
           ],
           "subcategories": [
             {
-              "id": "sub_1", "name": "مرتديلا بفاريا",
+              "name": "مرتديلا بفاريا",
               "items": [
-                { "id": "i_4", "name": "مرتديلا بفاريا دجاج 150 غرام", "description": "سادة_ زيتون _فلفل حب _ كوكتيل _بيتزا", "price": "10000", "currency": "ل.س", "unit": "قطعة" },
-                { "id": "i_5", "name": "مرتديلا دجاج قالب 1 كغ", "description": "سادة_ زيتون _فلفل حب _ كوكتيل _بيتزا", "price": "43950", "currency": "ل.س", "unit": "قالب" },
-                { "id": "i_6", "name": "مرتديلا دجاج بفاريا 200 غرام", "description": "سادة_ زيتون _ فلفل حب _بيتزا _ فليفله _مدخن", "price": "8750", "currency": "ل.س", "unit": "" }
+                { "name": "مرتديلا بفاريا دجاج 150 غرام", "description": "سادة_ زيتون _فلفل حب _ كوكتيل _بيتزا", "price": "10000", "currency": "ل.س" },
+                { "name": "مرتديلا دجاج قالب 1 كغ", "description": "سادة_ زيتون _فلفل حب _ كوكتيل _بيتزا", "price": "43950", "currency": "ل.س" }
               ]
             },
             {
-              "id": "sub_2", "name": "هوت دوغ بفاريا",
+              "name": "هوت دوغ بفاريا",
               "items": [
-                { "id": "i_7", "name": "هوت دوغ دجاج مدخن 250 غرام", "description": "العدد بالكيس 6 قطعة", "price": "13750", "currency": "ل.س", "unit": "" },
-                { "id": "i_8", "name": "بفاريا هوت دوغ بقري ودجاج مدخن ١ كغ", "description": "التعبئة ١١ ، ١٦ ،٢٥ قطعة", "price": "54600", "currency": "ل.س", "unit": "قطعة" }
-              ]
-            },
-            {
-              "id": "sub_3", "name": "حبش و روستو بفاريا",
-              "items": [
-                { "id": "i_9", "name": "روستو صدر دجاج بفاريا مدخن 150 غرام", "description": "", "price": "17500", "currency": "ل.س", "unit": "" },
-                { "id": "i_10", "name": "روستو صدر دجاج مدخن بفاريا 1كغ", "description": "", "price": "101450", "currency": "ل.س", "unit": "" },
-                { "id": "i_11", "name": "روستو صدر دجاج مدخن بفاريا نكهات 150 غرام", "description": "فلفل اسود_فليفله حمرا _ تندوري _فاهيتا _ بيتزا", "price": "17500", "currency": "ل.س", "unit": "" },
-                { "id": "i_12", "name": "روستو صدر دجاج مدخن نكهات تعبئة 1 كغ", "description": "فلفل اسود_فليفله حمرا _ تندوري _فاهيتا _ بيتزا", "price": "101450", "currency": "ل.س", "unit": "" },
-                { "id": "i_13", "name": "روستو صدر حبش مدخن بفاريا 150 غرام", "description": "", "price": "22500", "currency": "ل.س", "unit": "" },
-                { "id": "i_14", "name": "روستو صدر حبش مدخن 1 كغ", "description": "", "price": "127850", "currency": "ل.س", "unit": "" },
-                { "id": "i_15", "name": "روستو بقري مدخن 150 غرام", "description": "", "price": "23350", "currency": "ل.س", "unit": "" },
-                { "id": "i_16", "name": "روستو بقري مدخن بفاريا 1 كغ", "description": "", "price": "132500", "currency": "ل.س", "unit": "" }
-              ]
-            },
-            {
-              "id": "sub_4", "name": "سلامي وببروني بفاريا",
-              "items": [
-                { "id": "i_17", "name": "بفاريا سلامي بقري 150 غرام", "description": "", "price": "25850", "currency": "ل.س", "unit": "قطعة" },
-                { "id": "i_18", "name": "بفاريا سلامي بقري 1 كغ", "description": "", "price": "155850", "currency": "ل.س", "unit": "قالب" },
-                { "id": "i_19", "name": "بفاريا ببروني بقري 150 غرام", "description": "", "price": "27500", "currency": "ل.س", "unit": "قطعة" },
-                { "id": "i_20", "name": "بفاريا ببروني بقري 1 كغ", "description": "", "price": "166650", "currency": "ل.س", "unit": "قالب" }
-              ]
-            },
-            {
-              "id": "sub_5", "name": "بيكن وبصطرمة بفاريا",
-              "items": [
-                { "id": "i_21", "name": "بفاريا بيكن دجاج 150 غرام", "description": "", "price": "10400", "currency": "ل.س", "unit": "قطعة" },
-                { "id": "i_22", "name": "بفاريا بيكن بقري", "description": "", "price": "34150", "currency": "ل.س", "unit": "قطعة" },
-                { "id": "i_23", "name": "بفاريا بصطرمة 150 غرام", "description": "", "price": "50000", "currency": "ل.س", "unit": "قطعة" },
-                { "id": "i_24", "name": "بفاريا بصطرمة 1 كغ", "description": "", "price": "285700", "currency": "ل.س", "unit": "قطعة" }
+                { "name": "هوت دوغ دجاج مدخن 250 غرام", "description": "العدد بالكيس 6 قطعة", "price": "13750", "currency": "ل.س" },
+                { "name": "بفاريا هوت دوغ بقري ودجاج مدخن ١ كغ", "description": "التعبئة ١١ ، ١٦ ،٢٥ قطعة", "price": "54600", "currency": "ل.س" }
               ]
             }
           ]
         },
         {
-          "id": "c2",
-          "name": "التوابل والبهارات",
+          "id": "c2", "name": "التوابل والبهارات",
           "items": [
-            { "id": "i_25", "name": "فلفل أبيض", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_26", "name": "فلفل أسود", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_27", "name": "كزبرة ناعمة / حب", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_28", "name": "هيل ناعم / حب", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_29", "name": "قرفة ناعمة / سيكار", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_30", "name": "ثوم / بصل بودرة", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_31", "name": "سماق / محلب", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_32", "name": "ماجي بودرة (أبيض / أصفر)", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_33", "name": "بابريكا (حلوة / مدخنة)", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_34", "name": "بهار مشكلة / يانسون / لومي / عصفر", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_35", "name": "اوريغانو / نعنع يابس / حبق", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_36", "name": "جوزة الطيب (ناعمة / حب)", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" },
-            { "id": "i_37", "name": "حلبة / زنجبيل (ناعم / حب)", "description": "تعبئة 1كغ", "price": "متغير", "currency": "", "unit": "" }
+            { "name": "فلفل أبيض / أسود", "description": "تعبئة 1كغ", "price": "متغير", "currency": "" },
+            { "name": "كزبرة ناعمة / حب", "description": "تعبئة 1كغ", "price": "متغير", "currency": "" },
+            { "name": "بابريكا (حلوة / مدخنة)", "description": "تعبئة 1كغ", "price": "متغير", "currency": "" }
           ]
         }
       ]
     };
 
-    // 2. توليد واجهة المنيو
+    // --- 2. بناء الواجهة ---
     function renderMenu() {
         const container = document.getElementById('menuContainer');
         let html = '';
-
         menuData.categories.forEach(category => {
-            html += `<div class="category-title">🛒 ${category.name}</div>`;
+            html += `<div class="category-section">`;
+            html += `<div class="category-title">${category.name}</div>`;
             
-            // عرض عناصر التصنيف الرئيسي
             if (category.items && category.items.length > 0) {
                 html += `<div class="items-grid">`;
-                category.items.forEach(item => {
-                    html += createItemCard(item);
-                });
+                category.items.forEach(item => html += createCard(item));
                 html += `</div>`;
             }
 
-            // عرض الأقسام الفرعية إن وجدت
-            if (category.subcategories && category.subcategories.length > 0) {
+            if (category.subcategories) {
                 category.subcategories.forEach(sub => {
-                    html += `<div class="subcategory-title">🔸 ${sub.name}</div>`;
+                    html += `<div class="sub-category-title">${sub.name}</div>`;
                     html += `<div class="items-grid">`;
-                    sub.items.forEach(item => {
-                        html += createItemCard(item);
-                    });
+                    sub.items.forEach(item => html += createCard(item));
                     html += `</div>`;
                 });
             }
+            html += `</div>`;
         });
-
         container.innerHTML = html;
     }
 
-    function createItemCard(item) {
-        let priceText = item.price == "0" || item.price === "متغير" ? "السعر عند الطلب" : `${item.price} ${item.currency} ${item.unit ? '/ '+item.unit : ''}`;
+    function createCard(item) {
+        let priceStr = (item.price === "0" || item.price === "متغير") ? "السعر عند الطلب" : `${item.price} ${item.currency} ${item.unit ? '/'+item.unit : ''}`;
         return `
             <div class="item-card">
                 <div>
                     <div class="item-name">${item.name}</div>
                     ${item.description ? `<div class="item-desc">${item.description}</div>` : ''}
                 </div>
-                <div class="item-price">${priceText}</div>
-            </div>
-        `;
+                <div class="item-price">${priceStr}</div>
+            </div>`;
     }
-
-    // استدعاء التوليد عند بدء الصفحة
     renderMenu();
 
-    // 3. نظام الدردشة والربط مع Gemini API
+    // --- 3. قسم الدردشة وربط الـ API بنفس الطريقة السابقة تماماً ---
     const chatBox = document.getElementById('chatBox');
     const chatInput = document.getElementById('chatInput');
     const typingIndicator = document.getElementById('typingIndicator');
     const sendBtn = document.getElementById('sendBtn');
-    
-    // الاحتفاظ بسياق المحادثة
-    let chatHistory = [];
+    const chatWindow = document.getElementById('chatWindow');
 
-    async function sendMessage() {
-        const apiKey = document.getElementById('apiKey').value.trim();
-        const text = chatInput.value.trim();
-
-        if (!text) return;
-        if (!apiKey) {
-            alert('يرجى إدخال مفتاح API الخاص بـ Gemini في الأعلى أولاً!');
-            return;
-        }
-
-        // إضافة رسالة المستخدم للواجهة
-        addMessageToChat('user', text);
-        chatInput.value = '';
-        
-        // إعداد رسالة النظام وجلب الرد
-        await fetchGeminiResponse(apiKey, text);
+    function toggleChat() {
+        chatWindow.classList.toggle('active');
+        if (chatWindow.classList.contains('active')) chatInput.focus();
     }
 
-    async function fetchGeminiResponse(apiKey, userMessage) {
+    async function handleChatAction() {
+        const apiKey = document.getElementById('apiKey').value.trim();
+        let userMessage = chatInput.value.trim();
+
+        if (!apiKey) return alert("يرجى إدخال مفتاح API في أعلى الصفحة أولاً!");
+        if (!userMessage) return;
+
+        addMessageToChat('user', userMessage);
+        chatInput.value = '';
+        
+        await communicateWithGemini(apiKey, userMessage);
+    }
+
+    async function communicateWithGemini(apiKey, userMessage) {
         setLoading(true);
 
-        // تقليص حجم الـ JSON المرسل لتوفير التوكنز والتركيز على المعلومات الهامة
-        const simplifiedMenu = JSON.stringify(menuData, null, 2);
+        // بناء الطلب لإعطاء جيميناي معلومات المنيو والطلب كـ JSON
+        let prompt = `أنت المساعد الذكي الخاص بمتجرنا للحوم الباردة والتوابل. 
+هذا هو المنيو الخاص بنا باختصار: ${JSON.stringify(menuData)}
 
-        // بناء الـ Prompt الشامل
-        let systemPrompt = `أنت مساعد ذكي واحترافي يعمل في متجر لبيع اللحوم الباردة والتوابل. 
-بيانات المنيو الخاص بالمتجر هي كالتالي:
-${simplifiedMenu}
+رسالة العميل: "${userMessage}"
 
-دورك:
-1. الرد على استفسارات العميل بناءً على المنتجات المتوفرة في المنيو حصراً.
-2. تقديم نصائح للطبخ واقتراح التوابل المناسبة لمنتجات اللحوم الباردة إذا طلب العميل.
-3. المساعدة في مقارنة الأسعار والمنتجات بشكل واضح ومنسق.
-4. التحدث بلغة عربية سلسة، ودودة، ومحترفة. لا تستخدم أسلوب الآلة.
-5. إذا سأل العميل عن منتج غير موجود، اعتذر بلباقة واقترح بديلاً متاحاً في المنيو.
+أجب على العميل بطريقة احترافية، ودودة، وقدم نصائح للطبخ أو مقارنات إذا لزم الأمر.
 
-رسالة العميل الحالية: "${userMessage}"
-أجب بشكل مباشر على رسالة العميل مستفيداً من الصلاحيات الممنوحة لك.
-`;
+أمر هام جداً: يجب أن تكون استجابتك عبارة عن JSON صالح فقط (بدون أي علامات Markdown مثل \`\`\`json) لكي يتمكن نظامي من قراءته، ويحتوي على مفتاح واحد فقط:
+{
+  "reply": "رسالتك المكتوبة لي هنا بأسلوبك البشري المرح"
+}`;
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // نفس الرابط والطريقة المستخدمة في كودك الأصلي
+        const url = `https://generativelanguage.googleapis.com/v1beta/interactions?key=${apiKey}`;
 
         try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: systemPrompt }]
-                    }]
+                    model: "gemini-3.6-flash", // نفس المودل والهيكلية الخاصة بك
+                    input: prompt
                 })
             });
 
             const data = await response.json();
+            let rawReply = "";
 
-            if (response.ok && data.candidates && data.candidates.length > 0) {
-                let aiText = data.candidates[0].content.parts[0].text;
-                addMessageToChat('ai', formatMarkdownText(aiText));
+            // نفس طريقة استخراج البيانات تماماً
+            if (response.ok && data.steps) {
+                for (const step of data.steps) {
+                    if (step.type === "model_output" && step.content) {
+                        for (const item of step.content) {
+                            if (item.type === "text") {
+                                rawReply += item.text;
+                            }
+                        }
+                    }
+                }
+
+                // محاولة تحويل الرد إلى JSON كما في كودك
+                let aiResponse;
+                try {
+                    let cleanJson = rawReply.replace(/```json/g, '').replace(/```/g, '').trim();
+                    aiResponse = JSON.parse(cleanJson);
+                } catch (e) {
+                    console.error("فشل في قراءة الـ JSON:", rawReply);
+                    aiResponse = { reply: rawReply }; // نظام احتياطي
+                }
+
+                if (aiResponse.reply) {
+                    addMessageToChat('ai', formatText(aiResponse.reply));
+                }
+
             } else {
-                addMessageToChat('ai', "عذراً، حدث خطأ في النظام ولم أستطع تحليل الطلب. تأكد من صحة مفتاح الـ API. ❌");
-                console.error(data);
+                addMessageToChat('ai', "عذراً، حدث خطأ في النظام ولم أستطع الرد! ❌");
+                console.log(data);
             }
         } catch (err) {
             console.error(err);
-            addMessageToChat('ai', "انقطع الاتصال! يرجى التأكد من جودة الإنترنت. 📡");
+            addMessageToChat('ai', "انقطع الاتصال بي! تأكد من جودة الإنترنت أو مفتاح الـ API. 📡");
         } finally {
             setLoading(false);
         }
@@ -332,7 +283,7 @@ ${simplifiedMenu}
     function addMessageToChat(sender, text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = `msg ${sender}`;
-        msgDiv.innerHTML = text; // استخدام innerHTML لدعم التنسيق البسيط
+        msgDiv.innerHTML = text; 
         chatBox.appendChild(msgDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
@@ -345,17 +296,11 @@ ${simplifiedMenu}
     }
 
     function handleEnter(e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
+        if (e.key === 'Enter') handleChatAction();
     }
 
-    // دالة بسيطة لتحويل بعض علامات Markdown الأساسية من جيميناي إلى HTML لتجميل الرد
-    function formatMarkdownText(text) {
-        return text
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-            .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
-            .replace(/\n/g, '<br>'); // New lines
+    function formatText(text) {
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
     }
 </script>
 
