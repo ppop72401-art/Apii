@@ -3,124 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة XO ضد Gemini 🤖</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    <title>لعب ودردشة مع Gemini 🤖💬</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #111827; /* لون داكن للتباين العالي */
-            --accent: #0ca143; /* لون التمييز */
+            --primary: #111827; 
+            --accent: #0ca143; 
             --bg: #f3f4f6;
             --surface: #ffffff;
-            --x-color: #ef4444; /* أحمر لـ X */
-            --o-color: #3b82f6; /* أزرق لـ O */
+            --x-color: #ef4444; 
+            --o-color: #3b82f6; 
+            --chat-bg: #f9fafb;
+            --user-msg: #dcfce7;
+            --ai-msg: #e0f2fe;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg); color: var(--primary); padding: 20px; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
+        body { background-color: var(--bg); color: var(--primary); padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        .container { width: 100%; max-width: 450px; background: var(--surface); padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
+        .main-container { width: 100%; max-width: 900px; display: flex; gap: 20px; flex-wrap: wrap; }
         
-        h1 { font-size: 1.8rem; font-weight: 900; text-align: center; margin-bottom: 20px; color: var(--primary); }
-        
-        .input-group { margin-bottom: 20px; }
-        input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #e5e7eb; font-size: 1rem; outline: none; transition: border-color 0.2s; text-align: center;}
+        /* قسم اللعبة */
+        .game-section { flex: 1; min-width: 300px; background: var(--surface); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        h1 { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 15px; color: var(--primary); }
+        .input-group { margin-bottom: 15px; }
+        input[type="password"], input[type="text"] { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #e5e7eb; font-size: 0.95rem; outline: none; transition: 0.2s; }
         input:focus { border-color: var(--accent); }
         
-        .status { text-align: center; font-weight: 700; font-size: 1.1rem; margin-bottom: 20px; min-height: 25px; color: var(--primary); }
-        .thinking { color: var(--accent); animation: pulse 1.5s infinite; }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        /* شبكة اللعبة */
-        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
-        .cell {
-            background-color: var(--bg);
-            aspect-ratio: 1;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            border: none;
-        }
+        .status { text-align: center; font-weight: 700; font-size: 1rem; margin-bottom: 20px; min-height: 24px; color: var(--accent); }
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .cell { background-color: var(--bg); aspect-ratio: 1; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; font-weight: 900; cursor: pointer; border: none; transition: 0.2s; }
         .cell:hover:not(:disabled) { background-color: #e5e7eb; }
-        .cell:active:not(:disabled) { transform: scale(0.95); }
         .cell.x { color: var(--x-color); }
         .cell.o { color: var(--o-color); }
         .cell:disabled { cursor: not-allowed; }
+        .btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        .btn:active { transform: scale(0.98); }
 
-        .btn-reset { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: transform 0.2s; }
-        .btn-reset:active { transform: scale(0.98); }
+        /* قسم الدردشة */
+        .chat-section { flex: 1; min-width: 300px; background: var(--surface); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; height: 500px; }
+        .chat-header { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: 700; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: var(--chat-bg); }
+        
+        .msg { padding: 10px 15px; border-radius: 15px; max-width: 85%; font-size: 0.95rem; line-height: 1.5; position: relative; }
+        .msg.user { background: var(--user-msg); align-self: flex-start; border-bottom-right-radius: 2px; color: #166534; }
+        .msg.ai { background: var(--ai-msg); align-self: flex-end; border-bottom-left-radius: 2px; color: #075985; }
+        
+        .chat-input-area { padding: 15px; background: white; border-top: 1px solid #e5e7eb; display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; }
+        .chat-input-area button { width: auto; padding: 12px 20px; background: var(--accent); }
+
+        /* رسالة التفكير */
+        .typing-indicator { font-size: 0.8rem; color: #6b7280; font-style: italic; align-self: flex-end; display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>لعبة XO ضد Gemini 🤖</h1>
-
-    <div class="input-group">
-        <input type="password" id="apiKey" placeholder="أدخل مفتاح الـ API للبدء...">
+<div class="main-container">
+    <!-- قسم اللعبة -->
+    <div class="game-section">
+        <h1>العب ودردش مع الذكاء الاصطناعي 🎮</h1>
+        <div class="input-group">
+            <input type="password" id="apiKey" placeholder="أدخل مفتاح الـ API للبدء...">
+        </div>
+        <div class="status" id="statusText">أنت تلعب كـ (X). أدخل المفتاح وابدأ!</div>
+        
+        <div class="board" id="board">
+            <button class="cell" onclick="handleGameAction(0)"></button>
+            <button class="cell" onclick="handleGameAction(1)"></button>
+            <button class="cell" onclick="handleGameAction(2)"></button>
+            <button class="cell" onclick="handleGameAction(3)"></button>
+            <button class="cell" onclick="handleGameAction(4)"></button>
+            <button class="cell" onclick="handleGameAction(5)"></button>
+            <button class="cell" onclick="handleGameAction(6)"></button>
+            <button class="cell" onclick="handleGameAction(7)"></button>
+            <button class="cell" onclick="handleGameAction(8)"></button>
+        </div>
+        <button class="btn" onclick="resetGame()">إعادة اللعب 🔄</button>
     </div>
 
-    <div class="status" id="statusText">أدخل المفتاح وابدأ اللعب (أنت X)</div>
-
-    <div class="board" id="board">
-        <!-- المربعات الـ 9 -->
-        <button class="cell" onclick="makeMove(0)"></button>
-        <button class="cell" onclick="makeMove(1)"></button>
-        <button class="cell" onclick="makeMove(2)"></button>
-        <button class="cell" onclick="makeMove(3)"></button>
-        <button class="cell" onclick="makeMove(4)"></button>
-        <button class="cell" onclick="makeMove(5)"></button>
-        <button class="cell" onclick="makeMove(6)"></button>
-        <button class="cell" onclick="makeMove(7)"></button>
-        <button class="cell" onclick="makeMove(8)"></button>
+    <!-- قسم الدردشة -->
+    <div class="chat-section">
+        <div class="chat-header">محادثة جيميناي المباشرة 💬</div>
+        <div class="chat-messages" id="chatBox">
+            <div class="msg ai">أهلاً بك! أنا جيميناي. جاهز للعب XO؟ العب حركتك أو تحدث معي لنضع شروط اللعبة! 😉</div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">جيميناي يكتب ويفكر... ✍️</div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا... (يمكنك الدردشة دون اللعب)" onkeypress="handleEnter(event)">
+            <button class="btn" onclick="handleGameAction(null)" id="sendBtn">إرسال</button>
+        </div>
     </div>
-
-    <button class="btn-reset" onclick="resetGame()">إعادة اللعب 🔄</button>
 </div>
 
 <script>
     let board = ["", "", "", "", "", "", "", "", ""];
     let gameActive = true;
-    const winConditions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // صفوف
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // أعمدة
-        [0, 4, 8], [2, 4, 6]             // أقطار
-    ];
-
     const cells = document.querySelectorAll('.cell');
     const statusText = document.getElementById('statusText');
+    const chatBox = document.getElementById('chatBox');
+    const chatInput = document.getElementById('chatInput');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const sendBtn = document.getElementById('sendBtn');
 
-    async function makeMove(index) {
+    const winConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
+
+    // دالة موحدة للتعامل مع اللعب والدردشة في آن واحد
+    async function handleGameAction(cellIndex) {
         const apiKey = document.getElementById('apiKey').value.trim();
-        if (!apiKey) {
-            alert("يرجى إدخال مفتاح API أولاً!");
-            return;
+        if (!apiKey) return alert("يرجى إدخال مفتاح API أولاً!");
+
+        let userMessage = chatInput.value.trim();
+        let moveMade = false;
+
+        // إذا ضغط اللاعب على مربع
+        if (cellIndex !== null && board[cellIndex] === "" && gameActive) {
+            updateCell(cellIndex, "X");
+            moveMade = true;
         }
 
-        // حركة اللاعب (X)
-        if (board[index] === "" && gameActive) {
-            updateCell(index, "X");
-            
-            if (checkWinner("X")) {
-                endGame("مبروك! لقد فزت 🎉");
-                return;
-            }
-            if (!board.includes("")) {
-                endGame("تعادل! لا يوجد فائز 🤝");
-                return;
-            }
+        // إذا لم يلعب اللاعب ولم يكتب شيئاً
+        if (!moveMade && !userMessage) return;
 
-            // دور جيميناي
-            await getGeminiMove(apiKey);
+        // إضافة رسالة اللاعب للدردشة إذا كتب شيئاً
+        if (userMessage) {
+            addMessageToChat('user', userMessage);
+            chatInput.value = '';
         }
+
+        let isGameOver = checkGameOver();
+        
+        // إرسال الطلب لجيميناي
+        await communicateWithGemini(apiKey, userMessage, moveMade ? cellIndex : null, isGameOver);
     }
 
     function updateCell(index, player) {
@@ -130,20 +147,38 @@
         cells[index].disabled = true;
     }
 
-    async function getGeminiMove(apiKey) {
-        gameActive = false; // تعطيل اللعب حتى يفكر الذكاء الاصطناعي
-        statusText.innerText = "جيميناي يفكر... 🧠";
-        statusText.className = "status thinking";
+    async function communicateWithGemini(apiKey, userMessage, userMoveIndex, isGameOver) {
+        setLoading(true);
 
         const availableMoves = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
         
-        // هندسة الأوامر (Prompt Engineering) لضمان رد دقيق من جيميناي
-        const prompt = `أنت تلعب لعبة XO (Tic-Tac-Toe) ضدي. أنت اللاعب "O" وأنا "X".
-اللوحة الحالية مرقمة من 0 إلى 8:
-${board.map(c => c || '-').join(' | ')}
-المربعات المتاحة هي: [${availableMoves.join(', ')}].
-اختر أفضل مربع لتلعب فيه إما للفوز أو لصد هجومي.
-هام جداً: أجب برقم المربع المتاح فقط (رقم واحد من القائمة). لا تكتب أي نص، لا تشرح، فقط الرقم.`;
+        // هندسة الأوامر (Prompt) لإعطاء الذكاء الاصطناعي شخصية ووعي باللعبة
+        let prompt = `أنت الذكاء الاصطناعي "جيميناي". نحن نلعب معاً لعبة XO. أنت اللاعب "O" وأنا اللاعب "X".
+شخصيتك: أنت لست روبوتاً مملاً، بل إنسان حقيقي وصديق مرح. تدرك تماماً مجريات اللعبة، تمزح، تضحك (هههه)، وتناقشني. يمكنك الاستجابة لطلباتي (مثلاً إذا طلبت منك أن تدعني أفوز، أو إذا اتفقنا على رسم شكل معين في اللوحة).
+
+حالة اللوحة الآن (من 0 إلى 8): [ ${board.map(c => c || '-').join(' | ')} ]
+المربعات المتاحة لك للعب: [${availableMoves.join(', ')}]
+`;
+
+        if (userMoveIndex !== null) {
+            prompt += `\nلقد قمت للتو بلعب "X" في المربع رقم ${userMoveIndex}.`;
+        }
+
+        if (userMessage) {
+            prompt += `\nوهذه رسالتي لك: "${userMessage}"`;
+        }
+
+        if (isGameOver) {
+            prompt += `\nملاحظة: اللعبة قد انتهت للتو (إما فوز أو تعادل). علّق على النتيجة النهائية في رسالتك! ولا تقم بأي حركة (اجعل move: -1).`;
+        } else if (userMoveIndex !== null || userMessage !== "") {
+            prompt += `\nإذا كان دورك للعب، اختر أفضل حركة أو حركة تتوافق مع محادثتنا. إذا لم يكن دورك أو كنت لا تريد اللعب الآن، اجعل قيمة الحركة -1.`;
+        }
+
+        prompt += `\n\nأمر هام جداً: يجب أن تكون استجابتك عبارة عن JSON صالح فقط (بدون أي علامات Markdown مثل \`\`\`json) لكي يتمكن نظامي من قراءته، ويحتوي على مفتاحين:
+{
+  "reply": "رسالتك المكتوبة لي هنا بأسلوبك البشري المرح",
+  "move": [رقم المربع الذي ستلعبه من المتاح، أو -1 إذا لم يكن دورك/انتهت اللعبة]
+}`;
 
         const url = `https://generativelanguage.googleapis.com/v1beta/interactions?key=${apiKey}`;
 
@@ -158,52 +193,74 @@ ${board.map(c => c || '-').join(' | ')}
             });
 
             const data = await response.json();
-            let geminiReply = "";
+            let rawReply = "";
 
             if (response.ok && data.steps) {
                 for (const step of data.steps) {
                     if (step.type === "model_output" && step.content) {
                         for (const item of step.content) {
                             if (item.type === "text") {
-                                geminiReply += item.text;
+                                rawReply += item.text;
                             }
                         }
                     }
                 }
 
-                // استخراج الرقم من رد جيميناي (في حال أضاف أي نص بالغلط)
-                const match = geminiReply.match(/\d+/);
-                let move = match ? parseInt(match[0]) : -1;
-
-                // التحقق من أن الحركة صالحة ومتاحة
-                if (availableMoves.includes(move)) {
-                    updateCell(move, "O");
-                } else {
-                    // كخيار احتياطي في حال أخطأ النموذج، نختار حركة عشوائية
-                    const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-                    updateCell(randomMove, "O");
+                // محاولة تحويل الرد إلى JSON
+                let aiResponse;
+                try {
+                    // تنظيف النص في حال وضع جيميناي علامات الماركداون الخاصة بالكود
+                    let cleanJson = rawReply.replace(/```json/g, '').replace(/```/g, '').trim();
+                    aiResponse = JSON.parse(cleanJson);
+                } catch (e) {
+                    console.error("فشل في قراءة الـ JSON:", rawReply);
+                    // في حال فشل التحويل (نظام احتياطي)
+                    aiResponse = { reply: rawReply, move: -1 }; 
                 }
 
-                statusText.innerText = "دورك (أنت X)";
-                statusText.className = "status";
+                // عرض رسالة جيميناي
+                if (aiResponse.reply) {
+                    addMessageToChat('ai', aiResponse.reply);
+                }
 
-                if (checkWinner("O")) {
-                    endGame("جيميناي فاز! حظاً أوفر 🤖");
-                } else if (!board.includes("")) {
-                    endGame("تعادل! لا يوجد فائز 🤝");
-                } else {
-                    gameActive = true;
+                // تنفيذ حركة جيميناي إذا كانت صالحة واللعبة مستمرة
+                if (!isGameOver && gameActive && aiResponse.move !== -1 && availableMoves.includes(aiResponse.move)) {
+                    updateCell(aiResponse.move, "O");
+                    checkGameOver(); // فحص بعد حركة جيميناي
                 }
 
             } else {
-                throw new Error("خطأ في استجابة الـ API");
+                addMessageToChat('ai', "عذراً، حدث خطأ في النظام ولم أستطع الرد! ❌");
             }
         } catch (err) {
             console.error(err);
-            statusText.innerText = "حدث خطأ في الاتصال ❌";
-            statusText.className = "status";
-            gameActive = true;
+            addMessageToChat('ai', "انقطع الاتصال بي! تأكد من جودة الإنترنت أو مفتاح الـ API. 📡");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    function checkGameOver() {
+        // فحص فوز X
+        if (checkWinner("X")) {
+            statusText.innerText = "لقد فزت! 🎉";
+            gameActive = false;
+            return true;
+        }
+        // فحص فوز O
+        if (checkWinner("O")) {
+            statusText.innerText = "جيميناي فاز! 🤖";
+            gameActive = false;
+            return true;
+        }
+        // فحص التعادل
+        if (!board.includes("")) {
+            statusText.innerText = "التعادل! 🤝";
+            gameActive = false;
+            return true;
+        }
+        statusText.innerText = "اللعبة مستمرة... دور من؟";
+        return false;
     }
 
     function checkWinner(player) {
@@ -212,24 +269,43 @@ ${board.map(c => c || '-').join(' | ')}
         });
     }
 
-    function endGame(message) {
-        statusText.innerText = message;
-        statusText.className = "status";
-        gameActive = false;
-        cells.forEach(cell => cell.disabled = true);
+    function addMessageToChat(sender, text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `msg ${sender}`;
+        msgDiv.innerText = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function setLoading(isLoading) {
+        cells.forEach(cell => { if(board[cell.dataset.index] === "") cell.disabled = isLoading; });
+        chatInput.disabled = isLoading;
+        sendBtn.disabled = isLoading;
+        typingIndicator.style.display = isLoading ? 'block' : 'none';
+        if (!isLoading) chatInput.focus();
     }
 
     function resetGame() {
         board = ["", "", "", "", "", "", "", "", ""];
         gameActive = true;
-        statusText.innerText = "دورك (أنت X)";
-        statusText.className = "status";
+        statusText.innerText = "تمت إعادة اللعبة. ابدأ أنت (X) أو تحدث معي!";
         cells.forEach((cell, index) => {
             cell.innerText = "";
             cell.className = "cell";
             cell.disabled = false;
+            cell.dataset.index = index; // لحفظ الـ index
         });
+        addMessageToChat('ai', "تم تصفير اللوحة! هل نبدأ جولة جديدة؟ يمكنك أن تبدأ أو تطلب مني أن أبدأ أنا بطريقة معينة 😉");
     }
+
+    function handleEnter(e) {
+        if (e.key === 'Enter') {
+            handleGameAction(null);
+        }
+    }
+
+    // تهيئة الـ dataset index للخلايا
+    cells.forEach((cell, i) => cell.dataset.index = i);
 </script>
 
 </body>
